@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            border: 2px solid #000;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .cell:hover {
+            background-color: #e0e0e0;
+        }
+
+        .status {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .cell.x::before {
+            content: "X";
+            color: #ff4757;
+        }
+
+        .cell.o::before {
+            content: "O";
+            color: #2ed573;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="game">
+        <div class="board">
+            <div class="cell" data-index="0" onclick="handleClick(this)"></div>
+            <div class=" cell" data-index="1" onclick="handleClick(this)"></div>
+            <div class="cell" data-index="2" onclick="handleClick(this)"></div>
+            <div class="cell" data-index="3" onclick="handleClick(this)"></div>
+            <div class="cell" data-index="4" onclick="handleClick(this)"></div>
+            <div class="cell" data-index="5" onclick="handleClick(this)"></div>
+            <div class="cell" data-index="6" onclick="handleClick(this)"></div>
+            <div class="cell" data-index="7" onclick="handleClick(this)"></div>
+            <div class="cell" data-index="8" onclick="handleClick(this)"></div>
+        </div>
+        <div class="status">Player X's turn</div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    var currentPlayer = "X";
+
+    var xCells = [];
+    var oCells = [];
+
+    function handleClick(e) {
+
+        const combinations = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        if (e.classList.contains("x") || e.classList.contains("o")) {
+            return;
+        }
+
+        if (currentPlayer == "X") {
+            e.classList.add("x");
+            currentPlayer = "O";
+            document.querySelector(".status").textContent = "Player O's turn";
+            xCells.push(Number(e.getAttribute("data-index")));
+        } else {
+            e.classList.add("o");
+            currentPlayer = "X";
+            document.querySelector(".status").textContent = "Player X's turn";
+            oCells.push(Number(e.getAttribute("data-index")));
+        }
+
+        // console.log(xCells, oCells);
+
+        for (let i = 0; i < combinations.length; i++) {
+            const [a, b, c] = combinations[i];
+            if (xCells.includes(a) && xCells.includes(b) && xCells.includes(c)) {
+                document.querySelector(".status").textContent = "Player X wins";
+                document.querySelectorAll(".cell").forEach(cell => cell.onclick = null);
+            }
+            if (oCells.includes(a) && oCells.includes(b) && oCells.includes(c)) {
+                document.querySelector(".status").textContent = "Player O wins";
+                document.querySelectorAll(".cell").forEach(cell => cell.onclick = null);
+            }
+        }
+
+    } 
+</script>
